@@ -10,6 +10,11 @@ services:
       # PIPA_AGENT_SOCKET: "/run/pipa/pipa-agent.sock"
     volumes:
       - pipa-appstore:/var/lib/pipa-server/appstore
+      # 容器运行时 socket：pipa-server 通过它直接管理宿主机上的容器。
+      # 默认按 docker 挂载；若宿主机用的是 podman（rootful），把下面这行换成
+      # /run/podman/podman.sock:/run/podman/podman.sock 即可。
+      - /var/run/docker.sock:/var/run/docker.sock
+      # - /run/podman/podman.sock:/run/podman/podman.sock
       # Host pipa-agent socket (uncomment when running alongside pipa-agent):
       # - /run/pipa:/run/pipa:ro
     restart: unless-stopped

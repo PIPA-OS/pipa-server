@@ -24,13 +24,37 @@ docker compose up -d
 `compose.yaml` in this repository is all you need. The server binary is shipped
 inside the container image pulled from GHCR — there is nothing to compile.
 
+## Container runtime (required)
+
+PiPA Server talks to the **host** container runtime over its Docker-compatible
+Unix socket and manages containers on that host directly. The socket **must be
+bind-mounted into the container**, otherwise the server fails with
+`容器运行时不可用`.
+
+`compose.yaml` mounts `/var/run/docker.sock` by default. If the host uses
+**podman (rootful)** instead, swap that line for:
+
+```yaml
+      - /run/podman/podman.sock:/run/podman/podman.sock
+```
+
+(Do not use the `containerd` backend — it is intentionally unsupported:
+containerd does not provide name resolution, log storage, or restart policies,
+so driving it would mean reimplementing those. The probe reports it as
+unsupported.)
+
 ## Configuration
 
 | Env / volume        | Purpose                                            |
 |---------------------|----------------------------------------------------|
 | `8080`              | Web console / OpenAPI listener                      |
+| `/var/run/docker.sock` | Host container runtime socket (mounted by default)   |
+| `/run/podman/podman.sock` | Podman runtime socket (use instead of docker.sock)   |
 | `/run/pipa`         | Host pipa-agent socket (mount `:ro` when present)   |
 | `pipa-appstore`     | Persistent imported-apps / appstore data volume    |
+| `PIPA_RUNTIME`      | `auto` (default) \| `podman` \| `docker`            |
+| `PIPA_DOCKER_SOCKET` | Override the docker socket path inside the container |
+| `PIPA_PODMAN_SOCKET` | Override the podman socket path inside the container |
 | `PIPA_AGENT_SOCKET` | Override the agent socket path (default `/run/pipa/pipa-agent.sock`) |
 | `PIPA_SERVER_IMAGE` | Override the image (e.g. to use your own mirror)    |
 
