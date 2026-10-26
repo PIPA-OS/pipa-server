@@ -1,16 +1,3 @@
-# pipa-server standalone deployment.
-#
-# Pulls the published image from GHCR. pipa-server is the PiPA control plane;
-# it reaches the host's pipa-agent over a Unix socket. Mount /run/pipa from the
-# host when pipa-agent runs there (e.g. on PiPA OS) -- without it the web
-# console still serves, but container/volume/network operations that touch the
-# host are unavailable.
-#
-#   docker compose up -d
-#   open http://localhost:8080
-#
-# Override the image (e.g. after moving to the PIPA-OS org namespace) with:
-#   PIPA_SERVER_IMAGE=ghcr.io/PIPA-OS/pipa-server:0.1.0 docker compose up -d
 services:
   pipa-server:
     image: ${PIPA_SERVER_IMAGE:-ghcr.io/yybit/pipa-server:0.1.0}
@@ -22,12 +9,10 @@ services:
       # Override the agent socket path if yours differs:
       # PIPA_AGENT_SOCKET: "/run/pipa/pipa-agent.sock"
     volumes:
-      pipa-webdav:/var/lib/pipa-server/webdav
       pipa-appstore:/var/lib/pipa-server/appstore
       # Host pipa-agent socket (uncomment when running alongside pipa-agent):
       # - /run/pipa:/run/pipa:ro
     restart: unless-stopped
 
 volumes:
-  pipa-webdav:
   pipa-appstore:

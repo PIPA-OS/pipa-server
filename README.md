@@ -28,7 +28,6 @@ inside the container image pulled from GHCR — there is nothing to compile.
 |---------------------|----------------------------------------------------|
 | `8080`              | Web console / OpenAPI listener                      |
 | `/run/pipa`         | Host pipa-agent socket (mount `:ro` when present)   |
-| `pipa-webdav`       | Persistent WebDAV data volume                      |
 | `pipa-appstore`     | Persistent imported-apps / appstore data volume    |
 | `PIPA_AGENT_SOCKET` | Override the agent socket path (default `/run/pipa/pipa-agent.sock`) |
 | `PIPA_SERVER_IMAGE` | Override the image (e.g. after an org-namespace move) |
@@ -42,11 +41,11 @@ host (creating containers/volumes/networks) are unavailable.
 - Container image: `ghcr.io/yybit/pipa-server:0.1.0`
   (packages page: https://github.com/yybit/packages — now public)
 - This repository contains only the deployment configuration and documentation.
-  The server binary is **not open source**; see [NOTICE.md](NOTICE.md).
+  The server binary is **not open source**.
 
 ## License
 
 The files in this repository (compose.yaml, documentation) are released under
-the MIT License — see [LICENSE](LICENSE). The `pipa-server` binary image it
-references is proprietary software distributed via GHCR; its source is not
+the Apache License 2.0 — see [LICENSE](LICENSE). The `pipa-server` binary image
+it references is proprietary software distributed via GHCR; its source is not
 published here.
