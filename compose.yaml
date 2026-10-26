@@ -9,7 +9,7 @@ services:
       # Override the agent socket path if yours differs:
       # PIPA_AGENT_SOCKET: "/run/pipa/pipa-agent.sock"
     volumes:
-      pipa-appstore:/var/lib/pipa-server/appstore
+      - pipa-appstore:/var/lib/pipa-server/appstore
       # Host pipa-agent socket (uncomment when running alongside pipa-agent):
       # - /run/pipa:/run/pipa:ro
     restart: unless-stopped
