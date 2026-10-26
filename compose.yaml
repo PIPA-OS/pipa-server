@@ -17,10 +17,8 @@ services:
     container_name: pipa-server
     ports:
       - "8080:8080"   # web console / OpenAPI
-      - "8083:8083"   # webdav
     environment:
       PIPA_OPENAPI_ADDR: "0.0.0.0:8080"
-      PIPA_WEBDAV_ADDR: "0.0.0.0:8083"
       # Override the agent socket path if yours differs:
       # PIPA_AGENT_SOCKET: "/run/pipa/pipa-agent.sock"
     volumes:

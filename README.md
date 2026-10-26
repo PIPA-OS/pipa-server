@@ -27,7 +27,6 @@ inside the container image pulled from GHCR — there is nothing to compile.
 | Env / volume        | Purpose                                            |
 |---------------------|----------------------------------------------------|
 | `8080`              | Web console / OpenAPI listener                      |
-| `8083`              | WebDAV listener                                    |
 | `/run/pipa`         | Host pipa-agent socket (mount `:ro` when present)   |
 | `pipa-webdav`       | Persistent WebDAV data volume                      |
 | `pipa-appstore`     | Persistent imported-apps / appstore data volume    |
@@ -41,7 +40,7 @@ host (creating containers/volumes/networks) are unavailable.
 ## Image & downloads
 
 - Container image: `ghcr.io/yybit/pipa-server:0.1.0`
-  (packages page: https://github.com/yybit/packages — make sure it is public)
+  (packages page: https://github.com/yybit/packages — now public)
 - This repository contains only the deployment configuration and documentation.
   The server binary is **not open source**; see [NOTICE.md](NOTICE.md).
 
