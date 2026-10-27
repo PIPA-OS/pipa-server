@@ -1,6 +1,6 @@
 services:
   pipa-server:
-    image: ${PIPA_SERVER_IMAGE:-ghcr.io/pipa-os/pipa-server:0.1.8}
+    image: ${PIPA_SERVER_IMAGE:-ghcr.io/pipa-os/pipa-server:0.1.9}
     container_name: pipa-server
     ports:
       - "8080:8080"   # web console / OpenAPI

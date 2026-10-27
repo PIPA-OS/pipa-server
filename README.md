@@ -10,7 +10,7 @@ container image on GitHub Container Registry (GHCR).
 
 ```sh
 # pull the image
-docker pull ghcr.io/pipa-os/pipa-server:0.1.8
+docker pull ghcr.io/pipa-os/pipa-server:0.1.9
 
 # start it (compose.yaml is in this repo)
 docker compose up -d
@@ -92,7 +92,7 @@ host (creating containers/volumes/networks) are unavailable.
 
 ## Image & downloads
 
-- Container image: `ghcr.io/pipa-os/pipa-server:0.1.8`
+- Container image: `ghcr.io/pipa-os/pipa-server:0.1.9`
   (packages page: https://github.com/orgs/pipa-os/packages — public)
 - This repository contains only the deployment configuration and documentation.
   The server binary is **not open source**.
