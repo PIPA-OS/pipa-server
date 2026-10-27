@@ -28,15 +28,34 @@ inside the container image pulled from GHCR — there is nothing to compile.
 
 PiPA Server talks to the **host** container runtime over its Docker-compatible
 Unix socket and manages containers on that host directly. The socket **must be
-bind-mounted into the container**, otherwise the server fails with
-`容器运行时不可用`.
+bind-mounted into the container** at `/var/run/docker.sock`, otherwise the
+server fails with `容器运行时不可用`.
 
-`compose.yaml` mounts `/var/run/docker.sock` by default. If the host uses
-**podman (rootful)** instead, swap that line for:
+The **source** path depends on how the host runs the runtime. Set it with
+`PIPA_RUNTIME_SOCKET` (in a local `.env` next to `compose.yaml`, or in the
+shell); the default is `/var/run/docker.sock`:
 
-```yaml
-      - /run/podman/podman.sock:/run/podman/podman.sock
+| Host runtime    | `PIPA_RUNTIME_SOCKET`                                             |
+|-----------------|-------------------------------------------------------------------|
+| rootful docker  | `/var/run/docker.sock` (default)                                  |
+| rootless docker | `$XDG_RUNTIME_DIR/docker.sock`, e.g. `/run/user/1000/docker.sock` |
+| rootful podman  | `/run/podman/podman.sock`                                         |
+| rootless podman | `$XDG_RUNTIME_DIR/podman/podman.sock`                             |
+
+Example `.env` for a rootless docker host:
+
 ```
+PIPA_RUNTIME_SOCKET=/run/user/1000/docker.sock
+```
+
+Then confirm the container can reach it:
+
+```sh
+docker exec pipa-server ls -l /var/run/docker.sock    # expects srw-rw----
+```
+
+`PIPA_RUNTIME_SOCKET` is read by `docker compose` (the host-side source path);
+the in-container probe path stays `/var/run/docker.sock`.
 
 (Do not use the `containerd` backend — it is intentionally unsupported:
 containerd does not provide name resolution, log storage, or restart policies,
@@ -48,10 +67,12 @@ unsupported.)
 | Env / volume        | Purpose                                            |
 |---------------------|----------------------------------------------------|
 | `8080`              | Web console / OpenAPI listener                      |
-| `/var/run/docker.sock` | Host container runtime socket (mounted by default)   |
-| `/run/podman/podman.sock` | Podman runtime socket (use instead of docker.sock)   |
+| `/var/run/docker.sock` | Runtime socket inside the container (mount target) |
 | `/run/pipa`         | Host pipa-agent socket (mount `:ro` when present)   |
 | `pipa-appstore`     | Persistent imported-apps / appstore data volume    |
+| `pipa-auth`         | Persistent local accounts, hashes and sessions      |
+| `pipa-webdav`       | Persistent WebDAV uploads                           |
+| `PIPA_RUNTIME_SOCKET` | Compose-time host path of the runtime socket (default `/var/run/docker.sock`) |
 | `PIPA_RUNTIME`      | `auto` (default) \| `podman` \| `docker`            |
 | `PIPA_DOCKER_SOCKET` | Override the docker socket path inside the container |
 | `PIPA_PODMAN_SOCKET` | Override the podman socket path inside the container |

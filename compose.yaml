@@ -20,13 +20,13 @@ services:
       - pipa-auth:/var/lib/pipa-server/auth           # local accounts & sessions
       - pipa-webdav:/var/lib/pipa-server/webdav        # uploaded files
       # Host container runtime socket: pipa-server drives the host runtime over
-      # its Docker-compatible API. Default assumes docker. On a rootful-podman
-      # host, comment the docker line and uncomment the podman one (mount only
-      # the socket that exists — mounting a missing one under /run fails with
-      # "mkdir: permission denied"). For rootless podman, set PIPA_PODMAN_SOCKET
-      # to the socket under XDG_RUNTIME_DIR (e.g. /run/user/1000) and mount it.
-      - /var/run/docker.sock:/var/run/docker.sock
-      # - /run/podman/podman.sock:/run/podman/podman.sock
+      # its Docker-compatible API. The container side is always
+      # /var/run/docker.sock; the SOURCE depends on how the host runs it:
+      #   rootful docker         -> /var/run/docker.sock (default)
+      #   rootless docker/podman -> per-user socket, e.g. /run/user/1000/docker.sock
+      #   rootful podman         -> /run/podman/podman.sock
+      # Override the source with PIPA_RUNTIME_SOCKET (in .env or the shell).
+      - ${PIPA_RUNTIME_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock
       # Host pipa-agent socket (uncomment when running alongside pipa-agent):
       # - /run/pipa:/run/pipa:ro
     restart: unless-stopped
