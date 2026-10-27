@@ -6,6 +6,10 @@ PiPA Server is the console/service that lets you deploy and manage
 self-hosted apps and containers from a single web UI. It is distributed as a
 container image on GitHub Container Registry (GHCR).
 
+![PiPA Server console](docs/pipa-server.png)
+
+*The console: installed apps, their state, and the shared app network in one view.*
+
 ## Quick start
 
 ```sh
