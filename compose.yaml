@@ -1,9 +1,15 @@
 services:
   pipa-server:
-    image: ${PIPA_SERVER_IMAGE:-ghcr.io/pipa-os/pipa-server:0.1.6}
+    image: ${PIPA_SERVER_IMAGE:-ghcr.io/pipa-os/pipa-server:0.1.7}
     container_name: pipa-server
     ports:
       - "8080:8080"   # web console / OpenAPI
+    # SELinux (Fedora/RHEL): connecting to the host docker socket from inside a
+    # container is denied by the default container_t policy (EACCES / os error 13).
+    # Disabling the label for this management container is the standard fix and is
+    # harmless where SELinux is off. If SELinux is disabled you can drop this.
+    security_opt:
+      - label=disable
     environment:
       PIPA_OPENAPI_ADDR: "0.0.0.0:8080"
       # Override the agent socket path if yours differs:
