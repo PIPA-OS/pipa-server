@@ -79,7 +79,7 @@ unsupported.)
 | `PIPA_RUNTIME_SOCKET` | Compose-time host path of the runtime socket (default `/var/run/docker.sock`) |
 | `PIPA_DATA_DIR` | Host path where app data volumes are created (writable by the runtime user) |
 | `PIPA_CONTAINER_NAME` | Own container name (lets the server join `pipa-ingress`; required on compose) |
-| `PIPA_IMAGE_REGISTRY` | Registry serving pipa's own images (pipa-proxy / mesh / toonflow) |
+| `PIPA_IMAGE_REGISTRY` | Registry serving pipa's own images; default `ghcr.io/pipa-os` (pipa-proxy / mesh / toonflow) |
 | `PIPA_RUNTIME`      | `auto` (default) \| `podman` \| `docker`            |
 | `PIPA_DOCKER_SOCKET` | Override the docker socket path inside the container |
 | `PIPA_PODMAN_SOCKET` | Override the podman socket path inside the container |

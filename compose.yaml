@@ -16,7 +16,7 @@ services:
       PIPA_DATA_DIR: ${PIPA_DATA_DIR:-/var/pipa-data}
       # Registry serving pipa's own images (pipa-proxy/pipa-mesh/pipa-toonflow).
       # The ${REGISTRY} placeholder in app manifests resolves to this.
-      PIPA_IMAGE_REGISTRY: ${PIPA_IMAGE_REGISTRY:-localhost:5000}
+      PIPA_IMAGE_REGISTRY: ${PIPA_IMAGE_REGISTRY:-ghcr.io/pipa-os}
       # Override the agent socket path if yours differs:
       # PIPA_AGENT_SOCKET: "/run/pipa/pipa-agent.sock"
     volumes:
