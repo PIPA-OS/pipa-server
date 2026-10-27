@@ -4,14 +4,12 @@ services:
     container_name: pipa-server
     ports:
       - "8080:8080"   # web console / OpenAPI
-    # SELinux (Fedora/RHEL): connecting to the host docker socket from inside a
-    # container is denied by the default container_t policy (EACCES / os error 13).
-    # Disabling the label for this management container is the standard fix and is
-    # harmless where SELinux is off. If SELinux is disabled you can drop this.
-    security_opt:
-      - label=disable
     environment:
       PIPA_OPENAPI_ADDR: "0.0.0.0:8080"
+      # Host path (on the runtime machine) where app data volumes are created.
+      # A rootless runtime runs as your user and cannot write /var/pipa-data, so
+      # set PIPA_DATA_DIR (via .env) to a path under the runtime user's home.
+      PIPA_DATA_DIR: ${PIPA_DATA_DIR:-/var/pipa-data}
       # Override the agent socket path if yours differs:
       # PIPA_AGENT_SOCKET: "/run/pipa/pipa-agent.sock"
     volumes:

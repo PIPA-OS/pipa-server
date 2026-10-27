@@ -46,7 +46,11 @@ Example `.env` for a rootless docker host:
 
 ```
 PIPA_RUNTIME_SOCKET=/run/user/1000/docker.sock
+PIPA_DATA_DIR=/home/<user>/.local/share/pipa-data
 ```
+
+A rootless runtime also cannot create app data volumes under `/var/pipa-data`
+(root-owned), so set `PIPA_DATA_DIR` to a path the runtime user can write.
 
 Then confirm the container can reach it:
 
@@ -73,6 +77,7 @@ unsupported.)
 | `pipa-auth`         | Persistent local accounts, hashes and sessions      |
 | `pipa-webdav`       | Persistent WebDAV uploads                           |
 | `PIPA_RUNTIME_SOCKET` | Compose-time host path of the runtime socket (default `/var/run/docker.sock`) |
+| `PIPA_DATA_DIR` | Host path where app data volumes are created (writable by the runtime user) |
 | `PIPA_RUNTIME`      | `auto` (default) \| `podman` \| `docker`            |
 | `PIPA_DOCKER_SOCKET` | Override the docker socket path inside the container |
 | `PIPA_PODMAN_SOCKET` | Override the podman socket path inside the container |
