@@ -10,7 +10,7 @@ container image on GitHub Container Registry (GHCR).
 
 ```sh
 # pull the image
-docker pull ghcr.io/pipa-os/pipa-server:0.1.7
+docker pull ghcr.io/pipa-os/pipa-server:0.1.8
 
 # start it (compose.yaml is in this repo)
 docker compose up -d
@@ -78,6 +78,8 @@ unsupported.)
 | `pipa-webdav`       | Persistent WebDAV uploads                           |
 | `PIPA_RUNTIME_SOCKET` | Compose-time host path of the runtime socket (default `/var/run/docker.sock`) |
 | `PIPA_DATA_DIR` | Host path where app data volumes are created (writable by the runtime user) |
+| `PIPA_CONTAINER_NAME` | Own container name (lets the server join `pipa-ingress`; required on compose) |
+| `PIPA_IMAGE_REGISTRY` | Registry serving pipa's own images (pipa-proxy / mesh / toonflow) |
 | `PIPA_RUNTIME`      | `auto` (default) \| `podman` \| `docker`            |
 | `PIPA_DOCKER_SOCKET` | Override the docker socket path inside the container |
 | `PIPA_PODMAN_SOCKET` | Override the podman socket path inside the container |
@@ -90,7 +92,7 @@ host (creating containers/volumes/networks) are unavailable.
 
 ## Image & downloads
 
-- Container image: `ghcr.io/pipa-os/pipa-server:0.1.7`
+- Container image: `ghcr.io/pipa-os/pipa-server:0.1.8`
   (packages page: https://github.com/orgs/pipa-os/packages — public)
 - This repository contains only the deployment configuration and documentation.
   The server binary is **not open source**.

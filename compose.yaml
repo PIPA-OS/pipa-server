@@ -1,15 +1,22 @@
 services:
   pipa-server:
-    image: ${PIPA_SERVER_IMAGE:-ghcr.io/pipa-os/pipa-server:0.1.7}
+    image: ${PIPA_SERVER_IMAGE:-ghcr.io/pipa-os/pipa-server:0.1.8}
     container_name: pipa-server
     ports:
       - "8080:8080"   # web console / OpenAPI
     environment:
       PIPA_OPENAPI_ADDR: "0.0.0.0:8080"
+      # Own container name: lets the server attach itself to pipa-ingress at
+      # startup so it can reach the gateway admin API and app containers by
+      # name. PiPA OS sets this via pipa-fleet-up; compose installs must too.
+      PIPA_CONTAINER_NAME: pipa-server
       # Host path (on the runtime machine) where app data volumes are created.
       # A rootless runtime runs as your user and cannot write /var/pipa-data, so
       # set PIPA_DATA_DIR (via .env) to a path under the runtime user's home.
       PIPA_DATA_DIR: ${PIPA_DATA_DIR:-/var/pipa-data}
+      # Registry serving pipa's own images (pipa-proxy/pipa-mesh/pipa-toonflow).
+      # The ${REGISTRY} placeholder in app manifests resolves to this.
+      PIPA_IMAGE_REGISTRY: ${PIPA_IMAGE_REGISTRY:-localhost:5000}
       # Override the agent socket path if yours differs:
       # PIPA_AGENT_SOCKET: "/run/pipa/pipa-agent.sock"
     volumes:
