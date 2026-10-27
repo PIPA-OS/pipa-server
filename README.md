@@ -29,7 +29,7 @@ inside the container image pulled from GHCR — there is nothing to compile.
 PiPA Server talks to the **host** container runtime over its Docker-compatible
 Unix socket and manages containers on that host directly. The socket **must be
 bind-mounted into the container** at `/var/run/docker.sock`, otherwise the
-server fails with `容器运行时不可用`.
+server fails with a "container runtime unavailable" error.
 
 The **source** path depends on how the host runs the runtime. Set it with
 `PIPA_RUNTIME_SOCKET` (in a local `.env` next to `compose.yaml`, or in the
