@@ -1,6 +1,6 @@
 services:
   pipa-server:
-    image: ${PIPA_SERVER_IMAGE:-ghcr.io/pipa-os/pipa-server:0.1.4}
+    image: ${PIPA_SERVER_IMAGE:-ghcr.io/pipa-os/pipa-server:0.1.5}
     container_name: pipa-server
     ports:
       - "8080:8080"   # web console / OpenAPI
@@ -9,13 +9,20 @@ services:
       # Override the agent socket path if yours differs:
       # PIPA_AGENT_SOCKET: "/run/pipa/pipa-agent.sock"
     volumes:
-      - pipa-appstore:/var/lib/pipa-server/appstore
+      # Persisted state — named volumes survive container destroy/recreate:
+      - pipa-appstore:/var/lib/pipa-server/appstore   # installed apps catalog
+      - pipa-auth:/var/lib/pipa-server/auth           # local accounts & sessions
+      - pipa-webdav:/var/lib/pipa-server/webdav        # uploaded files
       # Host container runtime socket: pipa-server drives the host runtime
-      # directly over its Docker-compatible API. Mount this by default.
-      # If the host runs podman (rootful) instead of docker, replace the line
-      # below with: /run/podman/podman.sock:/run/podman/podman.sock
-      - /home/xyl/.lima/docker/sock/docker.sock/var/run/docker.sock
-      # - /run/podman/podman.sock:/run/podman/podman.sock
+      # directly over its Docker-compatible API. Mount whichever the host uses.
+      # auto detection probes podman > docker, so mounting both standard paths
+      # just works on a docker host or a rootful-podman host.
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /run/podman/podman.sock:/run/podman/podman.sock
+      # Rootless podman keeps its socket under XDG_RUNTIME_DIR (e.g. /run/user/1000)
+      # instead; mount that path (and set PIPA_PODMAN_SOCKET to match) if you use
+      # rootless podman:
+      # - /run/user/1000/podman/podman.sock:/run/podman/podman.sock
       # Host pipa-agent socket (uncomment when running alongside pipa-agent):
       # - /run/pipa:/run/pipa:ro
     restart: unless-stopped
@@ -23,3 +30,5 @@ services:
 
 volumes:
   pipa-appstore:
+  pipa-auth:
+  pipa-webdav:
